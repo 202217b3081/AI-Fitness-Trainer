@@ -271,20 +271,19 @@ st.markdown(
     """
     <style>
     :root {
-        --bg: #fff7fb;
-        --panel: #ffffff;
-        --panel-soft: #fff0f6;
-        --green: #7c5ce7;
-        --green-light: #6847d8;
-        --muted: #6f6680;
+        --bg: #0b1512;
+        --panel: #14251f;
+        --panel-soft: #1a3028;
+        --green: #39D98A;
+        --green-light: #8BFFB0;
+        --muted: #B8D8C8;
     }
 
     .stApp {
         background:
-            radial-gradient(circle at 8% 5%, rgba(255, 190, 214, .42), transparent 27%),
-            radial-gradient(circle at 92% 12%, rgba(183, 218, 255, .42), transparent 29%),
-            linear-gradient(135deg, #fff8fc 0%, #f5f3ff 52%, #eff8ff 100%);
-        color: #342d45;
+            radial-gradient(circle at 85% 8%, rgba(57,217,138,.10), transparent 28%),
+            linear-gradient(135deg, #0b1512 0%, #14251f 55%, #101b17 100%);
+        color: #F4FFF8;
     }
 
     .block-container {
@@ -294,115 +293,108 @@ st.markdown(
     }
 
     [data-testid="stSidebar"] {
-        background: linear-gradient(180deg, #f8eaff 0%, #eaf4ff 100%);
-        border-right: 1px solid #eadcf7;
+        background: linear-gradient(180deg, #14251f 0%, #0d1714 100%);
+        border-right: 1px solid rgba(139,255,176,.12);
     }
-    [data-testid="stSidebar"] * { color: #403451; }
+    [data-testid="stSidebar"] * { color: #F4FFF8; }
 
     h1, h2, h3 {
-        color: #6847d8 !important;
-        font-weight: 800 !important;
+        color: var(--green-light) !important;
+        font-weight: 750 !important;
         letter-spacing: -.4px;
     }
     h1 { font-size: clamp(1.65rem, 3vw, 2.25rem) !important; }
 
-    p, label, [data-testid="stMarkdownContainer"] { color: #514860; }
+    p, label, [data-testid="stMarkdownContainer"] { color: #E5F4EB; }
 
     .stTextInput input, .stSelectbox div[data-baseweb="select"],
     .stNumberInput input {
-        background: #ffffff;
-        border: 1px solid #e4d7f4;
-        border-radius: 16px;
-        color: #342d45;
+        background: #202b29;
+        border: 1px solid #345347;
+        border-radius: 11px;
+        color: #FFFFFF;
         min-height: 44px;
     }
 
     [data-testid="stWidgetLabel"] p {
-        color: #514860 !important;
-        font-weight: 700;
+        color: #D7F2E2 !important;
+        font-weight: 650;
     }
 
-    .stButton button, .stDownloadButton button, [data-testid="stFormSubmitButton"] button {
-        background: linear-gradient(100deg, #a78bfa, #f4a6c8 55%, #8ecdf5);
-        color: #302342;
+    .stButton button {
+        background: linear-gradient(90deg, #39D98A, #78F0A5);
+        color: #092016;
         border: 0;
-        border-radius: 999px;
-        font-weight: 800;
+        border-radius: 12px;
+        font-weight: 750;
         min-height: 44px;
-        padding: .55rem 1.35rem;
-        box-shadow: 0 5px 14px rgba(137, 103, 190, .15);
-        transition: transform .18s ease, box-shadow .18s ease;
+        padding: .55rem 1.3rem;
+        transition: all .2s ease;
     }
-    .stButton button:hover, .stDownloadButton button:hover,
-    [data-testid="stFormSubmitButton"] button:hover {
-        color: #302342;
+    .stButton button:hover {
+        background: #8BFFB0;
+        color: #092016;
         border: 0;
-        transform: translateY(-2px);
-        box-shadow: 0 8px 18px rgba(137, 103, 190, .22);
+        transform: translateY(-1px);
     }
 
     [data-testid="stMetric"] {
-        background: linear-gradient(145deg, #ffffff, #f8efff);
+        background: linear-gradient(145deg, #1b382d, #142820);
         padding: 18px;
-        border-radius: 22px;
-        border: 1px solid #eadcf7;
-        box-shadow: 0 5px 18px rgba(91, 68, 130, .07);
+        border-radius: 16px;
+        border: 1px solid rgba(57,217,138,.35);
     }
-    [data-testid="stMetricValue"] { color: #6847d8 !important; }
 
     [data-testid="stVerticalBlockBorderWrapper"] {
-        background: rgba(255,255,255,.78);
-        border: 1px solid #eadcf7;
-        border-radius: 20px;
-        box-shadow: 0 4px 16px rgba(91, 68, 130, .05);
+        background: rgba(20,37,31,.62);
+        border: 1px solid rgba(139,255,176,.16);
+        border-radius: 16px;
     }
 
     [data-testid="stDataFrame"] {
-        border: 1px solid #eadcf7;
-        border-radius: 16px;
+        border: 1px solid rgba(139,255,176,.2);
+        border-radius: 12px;
         overflow: hidden;
     }
 
+    /* Tutorial and live-workout presentation */
     [data-testid="stVideo"] {
-        background: #f5efff;
-        border: 1px solid #e5d8f5;
-        border-radius: 18px;
+        background: #10221b;
+        border: 1px solid rgba(139,255,176,.22);
+        border-radius: 16px;
         padding: 8px;
         overflow: hidden;
         margin: 8px 0 28px 0;
     }
     [data-testid="stImage"] img {
-        border: 1px solid #e5d8f5;
-        border-radius: 18px;
+        border: 1px solid rgba(139,255,176,.28);
+        border-radius: 16px;
     }
     .tutorial-link {
         display: inline-block;
-        background: linear-gradient(100deg,#8b70e8,#e88db9);
+        background: linear-gradient(90deg,#16794d,#239b65);
         color: #ffffff !important;
-        padding: 9px 16px;
-        border-radius: 999px;
+        padding: 9px 15px;
+        border-radius: 9px;
         text-decoration: none !important;
-        font-weight: 800;
+        font-weight: 700;
         margin: 0 0 8px 0;
     }
     .page-hero {
-        background: linear-gradient(115deg,#f4e8ff 0%,#ffeaf2 55%,#e8f5ff 100%);
-        border: 1px solid #e8d9f5;
-        border-left: 6px solid #a78bfa;
-        border-radius: 24px;
-        padding: 24px 26px;
+        background: linear-gradient(120deg,#174d38,#102820);
+        border: 1px solid rgba(139,255,176,.2);
+        border-left: 5px solid #39D98A;
+        border-radius: 17px;
+        padding: 22px 25px;
         margin: 4px 0 22px 0;
-        box-shadow: 0 7px 22px rgba(120, 91, 160, .08);
     }
-    .page-hero p { color: #514860 !important; }
     .info-card {
-        background: linear-gradient(145deg,rgba(255,255,255,.98),rgba(250,242,255,.98));
-        border: 1px solid #eadcf7;
-        border-radius: 20px;
-        padding: 17px 19px;
+        background: linear-gradient(145deg,rgba(26,48,40,.96),rgba(17,35,28,.96));
+        border: 1px solid rgba(139,255,176,.2);
+        border-radius: 14px;
+        padding: 16px 18px;
         min-height: 90px;
         margin-bottom: 12px;
-        box-shadow: 0 4px 15px rgba(91, 68, 130, .05);
     }
     .step-number {
         display:inline-flex;
@@ -411,22 +403,72 @@ st.markdown(
         width:30px;
         height:30px;
         border-radius:50%;
-        background: linear-gradient(135deg,#a78bfa,#f4a6c8);
-        color:#ffffff;
+        background:#39D98A;
+        color:#092016;
         font-weight:800;
         margin-right:10px;
     }
-    hr { border-color: #e9dff3; }
+    hr { border-color: rgba(139,255,176,.18); }
 
     [data-testid="stCheckbox"] label {
-        background: #f5edff;
-        border: 1px solid #dfcff4;
-        border-radius: 16px;
+        background: rgba(57,217,138,.10);
+        border: 1px solid rgba(57,217,138,.35);
+        border-radius: 12px;
         padding: 10px 14px;
-        font-weight: 750;
+        font-weight: 700;
     }
 
-    a { color: #7656d8 !important; }
+    a { color: #8BFFB0 !important; }
+
+    /* Soft pastel selectbox control and dropdown menu (avoid dark/black menu) */
+    .stSelectbox [data-baseweb="select"] > div {
+        background: #FFF7FB !important;
+        border: 1px solid #E9B8D0 !important;
+        border-radius: 12px !important;
+        color: #49364F !important;
+        box-shadow: 0 2px 8px rgba(180, 120, 160, .10) !important;
+    }
+    .stSelectbox [data-baseweb="select"] input,
+    .stSelectbox [data-baseweb="select"] div,
+    .stSelectbox [data-baseweb="select"] span {
+        color: #49364F !important;
+    }
+    .stSelectbox [data-baseweb="select"] svg {
+        fill: #9B5D87 !important;
+    }
+    [data-baseweb="popover"],
+    [data-baseweb="menu"],
+    [role="listbox"] {
+        background: #FFF7FB !important;
+        border: 1px solid #EBC9DA !important;
+        border-radius: 12px !important;
+        box-shadow: 0 10px 24px rgba(92, 55, 82, .16) !important;
+    }
+    [data-baseweb="popover"] ul,
+    [data-baseweb="menu"] ul,
+    [role="listbox"] {
+        background: #FFF7FB !important;
+    }
+    [data-baseweb="popover"] li,
+    [data-baseweb="menu"] li,
+    [role="option"] {
+        background: #FFF7FB !important;
+        color: #49364F !important;
+        border-radius: 8px !important;
+    }
+    [data-baseweb="popover"] li:hover,
+    [data-baseweb="menu"] li:hover,
+    [role="option"]:hover {
+        background: #FCE7F3 !important;
+        color: #49364F !important;
+    }
+    [data-baseweb="popover"] li[aria-selected="true"],
+    [data-baseweb="menu"] li[aria-selected="true"],
+    [role="option"][aria-selected="true"] {
+        background: #EADCF8 !important;
+        color: #553477 !important;
+        font-weight: 700 !important;
+    }
 
     @media (max-width: 768px) {
         .block-container { padding-left: 1rem; padding-right: 1rem; }
@@ -442,6 +484,8 @@ if "logged_in" not in st.session_state:
     st.session_state.logged_in = False
 if "pending_signup" not in st.session_state:
     st.session_state.pending_signup = False
+if "show_hi_animation" not in st.session_state:
+    st.session_state.show_hi_animation = False
 
 if not st.session_state.logged_in:
     st.markdown("""
@@ -465,6 +509,7 @@ if not st.session_state.logged_in:
                 account_name = check_login(login_email, login_password)
                 if account_name:
                     st.session_state.logged_in = True
+                    st.session_state.show_hi_animation = True
                     st.session_state.user_name = account_name
                     st.session_state.user_email = login_email.strip().lower()
                     st.rerun()
@@ -495,6 +540,7 @@ if not st.session_state.logged_in:
                 try:
                     create_user(signup_name, clean_email, signup_password)
                     st.session_state.logged_in = True
+                    st.session_state.show_hi_animation = True
                     st.session_state.user_name = signup_name.strip()
                     st.session_state.user_email = clean_email
                     st.success("Account created successfully!")
@@ -504,6 +550,38 @@ if not st.session_state.logged_in:
                 except Exception as exc:
                     st.error(f"Could not create account: {exc}")
     st.stop()
+
+# One-time, full-screen waving-hand emoji animation after successful login/signup.
+if st.session_state.get("show_hi_animation", False):
+    st.markdown("""
+    <style>
+      .hi-emoji-overlay {
+        position: fixed; inset: 0; z-index: 999999;
+        display: flex; align-items: center; justify-content: center;
+        background: rgba(8, 18, 14, 0.96);
+        pointer-events: none;
+        animation: hiOverlayFade 1.65s ease forwards;
+      }
+      .hi-emoji-only {
+        font-size: clamp(110px, 28vw, 250px);
+        line-height: 1; transform-origin: center;
+        animation: hiEmojiFly 1.65s cubic-bezier(.18,.72,.24,1) forwards;
+        filter: drop-shadow(0 12px 28px rgba(57,217,138,.32));
+      }
+      @keyframes hiEmojiFly {
+        0% { transform: scale(.12); opacity: 0; }
+        14% { transform: scale(1); opacity: 1; }
+        68% { transform: scale(3.2); opacity: 1; }
+        100% { transform: scale(8.5); opacity: 0; }
+      }
+      @keyframes hiOverlayFade {
+        0%, 78% { opacity: 1; visibility: visible; }
+        100% { opacity: 0; visibility: hidden; }
+      }
+    </style>
+    <div class="hi-emoji-overlay"><div class="hi-emoji-only">👋</div></div>
+    """, unsafe_allow_html=True)
+    st.session_state.show_hi_animation = False
 
 st.sidebar.markdown("""
 <div style="padding:12px 2px 18px 2px;">
@@ -964,7 +1042,7 @@ elif app_mode == 'Training':
         st.markdown("<hr/>", unsafe_allow_html=True)
 
         with mp_pose.Pose(static_image_mode=False,
-                          model_complexity=1,
+                          model_complexity=0,
                           smooth_landmarks=False,
                           enable_segmentation=False,
                           min_detection_confidence=0.5,
@@ -1558,3 +1636,4 @@ elif app_mode == 'History':
             st.info("No workout records available yet. Complete a workout to see your progress here.")
     else:
         st.info("No workout history found. Complete a workout first to create your history.")
+
