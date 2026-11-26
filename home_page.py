@@ -317,6 +317,77 @@ st.markdown(
         min-height: 44px;
     }
 
+    /* Keep Streamlit's selected dropdown and its opened menu in the same soft theme. */
+    [data-testid="stSidebar"] [data-baseweb="select"] > div,
+    [data-testid="stSidebar"] [data-baseweb="select"] div[role="combobox"],
+    [data-testid="stSidebar"] .stSelectbox [data-baseweb="select"] > div {
+        background: linear-gradient(110deg, #fff0f7 0%, #f1eaff 58%, #eaf6ff 100%) !important;
+        border: 1px solid #d9bce9 !important;
+        border-radius: 14px !important;
+        color: #493653 !important;
+        box-shadow: 0 3px 10px rgba(145, 105, 170, .10) !important;
+    }
+    [data-testid="stSidebar"] [data-baseweb="select"] *,
+    [data-testid="stSidebar"] [data-baseweb="select"] svg {
+        color: #493653 !important;
+        fill: #8c68ad !important;
+    }
+    [data-baseweb="popover"] [role="listbox"],
+    [data-baseweb="popover"] [data-baseweb="menu"],
+    [data-baseweb="popover"] ul {
+        background: #fff7fb !important;
+        border: 1px solid #e7d3f1 !important;
+        border-radius: 14px !important;
+        box-shadow: 0 10px 24px rgba(80, 55, 100, .16) !important;
+        overflow: hidden !important;
+    }
+    [data-baseweb="popover"] [role="option"],
+    [data-baseweb="popover"] li {
+        background: #fff7fb !important;
+        color: #493653 !important;
+    }
+    [data-baseweb="popover"] [role="option"]:hover,
+    [data-baseweb="popover"] li:hover {
+        background: #f5e6fb !important;
+        color: #493653 !important;
+    }
+    [data-baseweb="popover"] [aria-selected="true"] {
+        background: #eadcf8 !important;
+        color: #493653 !important;
+        font-weight: 750 !important;
+    }
+
+    .login-wave-overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 999999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        pointer-events: none;
+        background: rgba(255, 247, 251, .20);
+        animation: wave-overlay-out 1.8s ease forwards;
+    }
+    .login-wave-hand {
+        font-size: clamp(100px, 24vw, 210px);
+        line-height: 1;
+        filter: drop-shadow(0 12px 18px rgba(116, 78, 145, .20));
+        transform-origin: 70% 80%;
+        animation: hand-wave-zoom 1.8s cubic-bezier(.2,.75,.25,1) forwards;
+    }
+    @keyframes hand-wave-zoom {
+        0% { opacity: 0; transform: scale(.18) rotate(-18deg); }
+        18% { opacity: 1; transform: scale(.75) rotate(10deg); }
+        38% { opacity: 1; transform: scale(1.05) rotate(-13deg); }
+        54% { opacity: 1; transform: scale(1.28) rotate(12deg); }
+        72% { opacity: .9; transform: scale(1.65) rotate(-8deg); }
+        100% { opacity: 0; transform: scale(2.4) rotate(5deg); }
+    }
+    @keyframes wave-overlay-out {
+        0%, 72% { opacity: 1; }
+        100% { opacity: 0; visibility: hidden; }
+    }
+
     [data-testid="stWidgetLabel"] p {
         color: #514860 !important;
         font-weight: 700;
@@ -428,40 +499,6 @@ st.markdown(
 
     a { color: #7656d8 !important; }
 
-
-    /* Only the sidebar selectbox dropdown menu: keep the rest of the design unchanged. */
-    div[data-baseweb="popover"],
-    div[data-baseweb="menu"],
-    div[data-baseweb="popover"] > div {
-        background: #fff7fb !important;
-        border: 1px solid #eadcf7 !important;
-        border-radius: 14px !important;
-        box-shadow: 0 8px 22px rgba(91, 68, 130, .14) !important;
-    }
-    div[data-baseweb="popover"] [role="listbox"],
-    div[data-baseweb="menu"] [role="listbox"],
-    div[data-baseweb="popover"] ul {
-        background: #fff7fb !important;
-    }
-    div[data-baseweb="popover"] [role="option"],
-    div[data-baseweb="menu"] [role="option"],
-    div[data-baseweb="popover"] li {
-        background: #fff7fb !important;
-        color: #403451 !important;
-    }
-    div[data-baseweb="popover"] [role="option"]:hover,
-    div[data-baseweb="menu"] [role="option"]:hover,
-    div[data-baseweb="popover"] li:hover {
-        background: #fce7f3 !important;
-        color: #49364f !important;
-    }
-    div[data-baseweb="popover"] [role="option"][aria-selected="true"],
-    div[data-baseweb="menu"] [role="option"][aria-selected="true"] {
-        background: #eadcf8 !important;
-        color: #49364f !important;
-        font-weight: 700 !important;
-    }
-
     @media (max-width: 768px) {
         .block-container { padding-left: 1rem; padding-right: 1rem; }
     }
@@ -499,6 +536,7 @@ if not st.session_state.logged_in:
                 account_name = check_login(login_email, login_password)
                 if account_name:
                     st.session_state.logged_in = True
+                    st.session_state.show_login_wave = True
                     st.session_state.user_name = account_name
                     st.session_state.user_email = login_email.strip().lower()
                     st.rerun()
@@ -529,6 +567,7 @@ if not st.session_state.logged_in:
                 try:
                     create_user(signup_name, clean_email, signup_password)
                     st.session_state.logged_in = True
+                    st.session_state.show_login_wave = True
                     st.session_state.user_name = signup_name.strip()
                     st.session_state.user_email = clean_email
                     st.success("Account created successfully!")
@@ -539,13 +578,20 @@ if not st.session_state.logged_in:
                     st.error(f"Could not create account: {exc}")
     st.stop()
 
+# One-time full-screen waving-hand greeting immediately after successful login/signup.
+if st.session_state.pop("show_login_wave", False):
+    st.markdown(
+        '<div class="login-wave-overlay"><div class="login-wave-hand">👋</div></div>',
+        unsafe_allow_html=True,
+    )
+
 st.sidebar.markdown("""
 <div style="padding:12px 2px 18px 2px;">
   <div style="font-size:25px;font-weight:800;color:#8BFFB0;line-height:1.2;">
-    AI Fitness Trainer
+    💜 AI Fitness Trainer ✨
   </div>
   <div style="font-size:13px;color:#B8D8C8;margin-top:8px;">
-    Powered by MediaPipe &amp; OpenCV
+    👋 Powered by MediaPipe &amp; OpenCV 💪
   </div>
 </div>
 """, unsafe_allow_html=True)
