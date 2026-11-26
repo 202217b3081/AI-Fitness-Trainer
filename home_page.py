@@ -502,6 +502,86 @@ st.markdown(
     @media (max-width: 768px) {
         .block-container { padding-left: 1rem; padding-right: 1rem; }
     }
+
+    /* Pastel dropdown fix: style both the closed select and the opened option menu. */
+    [data-testid="stSelectbox"] [data-baseweb="select"] > div,
+    [data-testid="stSidebar"] [data-testid="stSelectbox"] [data-baseweb="select"] > div {
+        background: linear-gradient(110deg, #fff0f7 0%, #f1eaff 58%, #eaf6ff 100%) !important;
+        color: #493653 !important;
+        border: 1px solid #d9bce9 !important;
+        border-radius: 14px !important;
+    }
+    [data-baseweb="popover"],
+    [data-baseweb="popover"] > div,
+    [data-baseweb="popover"] [data-baseweb="menu"],
+    [data-baseweb="popover"] [role="listbox"],
+    [data-baseweb="popover"] ul,
+    ul[role="listbox"] {
+        background: #fff7fb !important;
+        color: #493653 !important;
+        border: 1px solid #e7d3f1 !important;
+        border-radius: 14px !important;
+    }
+    [data-baseweb="popover"] *,
+    [data-baseweb="popover"] [role="option"],
+    [data-baseweb="popover"] li,
+    li[role="option"] {
+        background-color: #fff7fb !important;
+        color: #493653 !important;
+    }
+    [data-baseweb="popover"] [role="option"]:hover,
+    [data-baseweb="popover"] li:hover,
+    li[role="option"]:hover {
+        background-color: #f5e6fb !important;
+        color: #493653 !important;
+    }
+    [data-baseweb="popover"] [aria-selected="true"],
+    [role="option"][aria-selected="true"] {
+        background-color: #eadcf8 !important;
+        color: #493653 !important;
+        font-weight: 750 !important;
+    }
+    /* Professional finishing layer: restrained colours, clear hierarchy, consistent controls. */
+    .stApp { color: #393448; }
+    h1, h2, h3 { letter-spacing: -0.025em; }
+    h2 { font-size: clamp(1.25rem, 2.2vw, 1.65rem) !important; }
+    h3 { font-size: 1.12rem !important; }
+    [data-testid="stSidebar"] { box-shadow: 2px 0 14px rgba(80, 65, 110, .04); }
+    [data-testid="stSidebar"] [data-testid="stMarkdownContainer"] p { color: #5A5369; }
+    .page-hero { border-left-width: 4px; box-shadow: 0 5px 16px rgba(87, 72, 120, .06); }
+    .info-card { box-shadow: 0 3px 12px rgba(87, 72, 120, .045); }
+    .stButton button, .stDownloadButton button,
+    [data-testid="stFormSubmitButton"] button {
+        background: #E9E1F6 !important;
+        color: #493D63 !important;
+        border: 1px solid #D8CBEA !important;
+        border-radius: 12px !important;
+        font-weight: 700 !important;
+        box-shadow: 0 2px 7px rgba(87, 72, 120, .07) !important;
+    }
+    .stButton button:hover, .stDownloadButton button:hover,
+    [data-testid="stFormSubmitButton"] button:hover {
+        background: #DFD3F0 !important;
+        border-color: #CDBBE5 !important;
+        transform: translateY(-1px);
+    }
+    .tutorial-link {
+        background: #E8E1F4 !important;
+        color: #514466 !important;
+        border: 1px solid #D8CBEA;
+        border-radius: 10px;
+        padding: 8px 13px;
+        font-weight: 700;
+        box-shadow: none;
+    }
+    .tutorial-link:hover { background: #DED3EF !important; }
+    [data-testid="stMetric"] { border-radius: 16px; }
+    [data-testid="stDataFrame"] { background: #FFFFFF; }
+    /* Replace any remaining dark native select surfaces with a soft pastel surface. */
+    select, option {
+        background-color: #fff7fb !important;
+        color: #493653 !important;
+    }
     </style>
     """,
     unsafe_allow_html=True,
@@ -517,8 +597,8 @@ if "pending_signup" not in st.session_state:
 if not st.session_state.logged_in:
     st.markdown("""
     <div class="page-hero">
-      <h1 style="margin:0;color:#8BFFB0 !important;">AI Fitness Trainer</h1>
-      <p style="margin:8px 0 0 0;color:#E5F4EB;">Sign in to continue your personal fitness journey.</p>
+      <h1 style="margin:0;color:#8B6BCB !important;">AI Fitness Trainer</h1>
+      <p style="margin:8px 0 0 0;color:#514860;">Sign in to continue your personal fitness journey.</p>
     </div>
     """, unsafe_allow_html=True)
 
@@ -587,10 +667,10 @@ if st.session_state.pop("show_login_wave", False):
 
 st.sidebar.markdown("""
 <div style="padding:12px 2px 18px 2px;">
-  <div style="font-size:25px;font-weight:800;color:#8BFFB0;line-height:1.2;">
+  <div style="font-size:25px;font-weight:800;color:#8B6BCB;line-height:1.2;">
     💜 AI Fitness Trainer ✨
   </div>
-  <div style="font-size:13px;color:#B8D8C8;margin-top:8px;">
+  <div style="font-size:13px;color:#766B86;margin-top:8px;">
     👋 Powered by MediaPipe &amp; OpenCV 💪
   </div>
 </div>
@@ -610,18 +690,18 @@ if st.sidebar.button("Logout", use_container_width=True):
 if app_mode == 'Training':
     st.markdown("""
     <div style="
-        background: linear-gradient(120deg, #174D38, #102820);
+        background: linear-gradient(120deg, #F2E8FA, #EAF3FF);
         padding: 30px;
         border-radius: 18px;
-        border-left: 6px solid #39D98A;
+        border-left: 6px solid #C7A7E8;
         margin-bottom: 25px;">
-        <h1 style="color:#7CFC9A; margin:0;">
+        <h1 style="color:#8B6BCB; margin:0;">
             Welcome to AI Fitness Trainer
         </h1>
-        <p style="color:white; font-size:18px;">
+        <p style="color:#514860; font-size:18px; font-weight:650;">
             Train Smart. Move Better. Stay Fit.
         </p>
-        <p style="color:#C5E8D5;">
+        <p style="color:#6D607D;">
             Your AI-powered workout companion using MediaPipe and OpenCV.
         </p>
     </div>
@@ -631,8 +711,8 @@ if app_mode == 'Training':
 if app_mode == 'Progress Dashboard':
     st.markdown("""
     <div class="page-hero">
-      <h1 style="margin:0;color:#8BFFB0 !important;">📈 Weekly Progress Dashboard</h1>
-      <p style="margin:8px 0 0 0;color:#E5F4EB;">A simple view of your saved workout activity.</p>
+      <h1 style="margin:0;color:#8B6BCB !important;">📈 Weekly Progress Dashboard</h1>
+      <p style="margin:8px 0 0 0;color:#514860;">A simple view of your saved workout activity.</p>
     </div>
     """, unsafe_allow_html=True)
     dashboard_data = load_user_history(st.session_state.user_email)
@@ -660,8 +740,8 @@ if app_mode == 'Progress Dashboard':
 elif app_mode == 'Goals & Achievements':
     st.markdown("""
     <div class="page-hero">
-      <h1 style="margin:0;color:#8BFFB0 !important;">🎯 Goals & Achievements</h1>
-      <p style="margin:8px 0 0 0;color:#E5F4EB;">Set personal targets and earn badges from saved workouts.</p>
+      <h1 style="margin:0;color:#8B6BCB !important;">🎯 Goals & Achievements</h1>
+      <p style="margin:8px 0 0 0;color:#514860;">Set personal targets and earn badges from saved workouts.</p>
     </div>
     """, unsafe_allow_html=True)
     current_week_goal, current_calorie_goal = get_user_goals(st.session_state.user_email)
@@ -720,8 +800,8 @@ elif app_mode == 'Goals & Achievements':
 elif app_mode == 'Rest Timer':
     st.markdown("""
     <div class="page-hero">
-      <h1 style="margin:0;color:#8BFFB0 !important;">⏱️ Workout Rest Timer</h1>
-      <p style="margin:8px 0 0 0;color:#E5F4EB;">Take a short break between exercise sets.</p>
+      <h1 style="margin:0;color:#8B6BCB !important;">⏱️ Workout Rest Timer</h1>
+      <p style="margin:8px 0 0 0;color:#514860;">Take a short break between exercise sets.</p>
     </div>
     """, unsafe_allow_html=True)
     rest_seconds = st.select_slider("Choose rest duration (seconds)",
@@ -731,7 +811,7 @@ elif app_mode == 'Rest Timer':
         progress_display = st.progress(0)
         for remaining in range(int(rest_seconds), 0, -1):
             timer_display.markdown(
-                f"<h1 style='text-align:center;color:#8BFFB0;font-size:56px'>{remaining}s</h1>",
+                f"<h1 style='text-align:center;color:#8B6BCB;font-size:56px'>{remaining}s</h1>",
                 unsafe_allow_html=True
             )
             progress_display.progress((int(rest_seconds) - remaining + 1) / int(rest_seconds))
@@ -743,15 +823,15 @@ elif app_mode == 'Rest Timer':
 if app_mode == 'About App':
     st.markdown("""
     <div class="page-hero">
-      <h1 style="margin:0;color:#8BFFB0 !important;">About AI Fitness Trainer</h1>
-      <p style="margin:8px 0 0 0;color:#E5F4EB;">An AI-powered exercise guidance application built with MediaPipe, OpenCV and Streamlit.</p>
+      <h1 style="margin:0;color:#8B6BCB !important;">About AI Fitness Trainer</h1>
+      <p style="margin:8px 0 0 0;color:#514860;">An AI-powered exercise guidance application built with MediaPipe, OpenCV and Streamlit.</p>
     </div>
     """, unsafe_allow_html=True)
 
     st.markdown("""
     <div class="info-card">
       <h3 style="margin:0 0 8px 0;">🤖 About the Application</h3>
-      <p style="margin:0;color:#D7EDE1;">MediaPipe detects body pose landmarks, OpenCV processes frames received securely from the browser camera through WebRTC, and Streamlit provides the web-based graphical user interface.</p>
+      <p style="margin:0;color:#514860;">MediaPipe detects body pose landmarks, OpenCV processes frames received securely from the browser camera through WebRTC, and Streamlit provides the web-based graphical user interface.</p>
     </div>
     <h2 style="margin-top:22px;">📋 How to Use</h2>
     """, unsafe_allow_html=True)
@@ -769,12 +849,12 @@ if app_mode == 'About App':
         "After completing your target, check your email inbox for the performance report."
     ]
     for idx, step in enumerate(steps, start=1):
-        st.markdown('<div class="info-card" style="display:flex;align-items:center;padding:13px 16px;min-height:unset;"><span class="step-number">' + str(idx) + '</span><span style="color:#E5F4EB;">' + step + '</span></div>', unsafe_allow_html=True)
+        st.markdown('<div class="info-card" style="display:flex;align-items:center;padding:13px 16px;min-height:unset;"><span class="step-number">' + str(idx) + '</span><span style="color:#514860;">' + step + '</span></div>', unsafe_allow_html=True)
 
     st.markdown("""
     <div class="info-card" style="border-left:4px solid #E6B84A;margin-top:18px;">
       <h3 style="margin:0 0 10px 0;">⚠️ Before You Start</h3>
-      <ul style="margin:0;color:#E5F4EB;padding-left:22px;">
+      <ul style="margin:0;color:#514860;padding-left:22px;">
         <li>Make sure the room has proper lighting.</li>
         <li>Ensure your camera is working properly.</li>
         <li>Keep your full body visible within the camera frame.</li>
@@ -785,40 +865,40 @@ if app_mode == 'About App':
 elif app_mode == 'Demos and Tutorials':
     st.markdown("""
     <div class="page-hero">
-      <h1 style="margin:0;color:#8BFFB0 !important;">🎬 Exercise Demos &amp; Tutorials</h1>
-      <p style="margin:8px 0 0 0;color:#E5F4EB;">Choose an exercise, watch its demonstration and follow the linked tutorial before starting your workout.</p>
+      <h1 style="margin:0;color:#8B6BCB !important;">🎬 Exercise Demos &amp; Tutorials</h1>
+      <p style="margin:8px 0 0 0;color:#514860;">Choose an exercise, watch its demonstration and follow the linked tutorial before starting your workout.</p>
     </div>
     """, unsafe_allow_html=True)
     #HIGH KNESS
     st.title("HIGH KNEES")
-    link_html = '<a href="https://youtu.be/oDdkytliOqE?si=Mferh8hYmi14Rh7m" style="background-color: rgb(0, 128, 131); color: #fff; text-decoration:none; padding: 5px;">Video tutorial &rarr;</a>'
+    link_html = '<a href="https://youtu.be/oDdkytliOqE?si=Mferh8hYmi14Rh7m" class="tutorial-link">Video tutorial &rarr;</a>'
     st.markdown(link_html, unsafe_allow_html=True)
     hk_video_url = "https://www.shutterstock.com/shutterstock/videos/1060403879/preview/stock-footage-athletic-woman-doing-high-knee-exercise-at-home-home-training-workout-home-fitness-there-is-some.webm"
     st.video(hk_video_url)
     
     #SQUATS
     st.title("SQUATS")
-    link_html = '<a href="https://youtu.be/4KmY44Xsg2w?si=eh8-DmSgjZptopSs" style="background-color: rgb(0, 128, 131); color: #fff; text-decoration:none; padding: 5px;">Video tutorial &rarr;</a>'
+    link_html = '<a href="https://youtu.be/4KmY44Xsg2w?si=eh8-DmSgjZptopSs" class="tutorial-link">Video tutorial &rarr;</a>'
     st.markdown(link_html, unsafe_allow_html=True)
     s_video_url = "https://www.shutterstock.com/shutterstock/videos/1102020407/preview/stock-footage-female-butt-workout-squats-at-home-athletic-asian-woman-squats-workout-in-living-room-female.webm"
     st.video(s_video_url)
     
     #SHOULDER PRESS
     st.title("SHOULDER PRESS")
-    link_html = '<a href="https://youtu.be/xe19t2_6yis?si=SIpCkA04UFBoJfs_" style="background-color: rgb(0, 128, 131); color: #fff; text-decoration:none; padding: 5px;">Video tutorial &rarr;</a>'
+    link_html = '<a href="https://youtu.be/xe19t2_6yis?si=SIpCkA04UFBoJfs_" class="tutorial-link">Video tutorial &rarr;</a>'
     st.markdown(link_html, unsafe_allow_html=True)
     shoulder_video_url = "https://ak.picdn.net/shutterstock/videos/1104019445/preview/stock-footage-medium-shot-of-young-sportsman-performing-barbell-shoulder-press-in-gym-man-holds-barbell-on-the.mp4"
     st.video(shoulder_video_url)
     
     #LATERAL CURLS
     st.title("LATERAL CURLS")
-    link_html = '<a href="https://youtu.be/PzsMitRdI_8?si=Xt_bteImzFf_vP7m" style="background-color: rgb(0, 128, 131); color: #fff; text-decoration:none; padding: 5px;">Video tutorial &rarr;</a>'
+    link_html = '<a href="https://youtu.be/PzsMitRdI_8?si=Xt_bteImzFf_vP7m" class="tutorial-link">Video tutorial &rarr;</a>'
     st.markdown(link_html, unsafe_allow_html=True)
     lcurls_video_url = "https://www.shutterstock.com/shutterstock/videos/1012307186/preview/stock-footage-bodybuilder-performs-seated-side-lateral-raise-reflection-of-exercise-in-mirror.webm"
     st.video(lcurls_video_url)
     #CURLS
     st.title("CURLS")
-    link_html = '<a href="https://youtu.be/sYV-ki-1blM?si=Oi9cMYUAKZnPggP_" style="background-color: rgb(0, 128, 131); color: #fff; text-decoration:none; padding: 5px;">Video tutorial &rarr;</a>'
+    link_html = '<a href="https://youtu.be/sYV-ki-1blM?si=Oi9cMYUAKZnPggP_" class="tutorial-link">Video tutorial &rarr;</a>'
     st.markdown(link_html, unsafe_allow_html=True)
     curls_video_url = "https://www.shutterstock.com/shutterstock/videos/1097465161/preview/stock-footage-athlete-exercising-with-dumbbells-in-indoor-gym-fit-man-doing-biceps-triceps-curls-workout-in-gym.webm"
     st.video(curls_video_url)
@@ -828,7 +908,7 @@ elif app_mode == 'Demos and Tutorials':
     
     #LEFT CURLS
     st.title("Left curls")
-    link_html = '<a href="https://www.youtube.com/shorts/cHxRJdSVIkA?feature=share" style="background-color: rgb(0, 128, 131); color: #fff; text-decoration:none; padding: 5px;">Video tutorial &rarr;</a>'
+    link_html = '<a href="https://www.youtube.com/shorts/cHxRJdSVIkA?feature=share" class="tutorial-link">Video tutorial &rarr;</a>'
     st.markdown(link_html, unsafe_allow_html=True)
     lecurls_video_url ="https://www.shutterstock.com/shutterstock/videos/1030360235/preview/stock-footage-fitness-sport-weightlifting-and-bodybuilding-concept-man-exercising-with-dumbbells-at-home.webm"
     st.video(lecurls_video_url)
@@ -836,21 +916,21 @@ elif app_mode == 'Demos and Tutorials':
     
     #PUSHUPS
     st.title("PUSH UPS")
-    link_html = '<a href="https://youtu.be/_UBOxUl0Sl4" style="background-color: rgb(0, 128, 131); color: #fff; text-decoration:none; padding: 5px;">Video tutorial &rarr;</a>'
+    link_html = '<a href="https://youtu.be/_UBOxUl0Sl4" class="tutorial-link">Video tutorial &rarr;</a>'
     st.markdown(link_html, unsafe_allow_html=True)
     pushups_video_url = "https://www.shutterstock.com/shutterstock/videos/1100041747/preview/stock-footage-calisthenics-outdoor-bodyweight-workout-doing-push-ups-in-sunny-day.webm"
     st.video(pushups_video_url)
     
     #PLANK
     st.title("PLANK")
-    link_html = '<a href="https://youtu.be/pvIjsG5Svck?si=ry3kol3TxHF7hu3g" style="background-color: rgb(0, 128, 131); color: #fff; text-decoration:none; padding: 5px;">Video tutorial &rarr;</a>'
+    link_html = '<a href="https://youtu.be/pvIjsG5Svck?si=ry3kol3TxHF7hu3g" class="tutorial-link">Video tutorial &rarr;</a>'
     st.markdown(link_html, unsafe_allow_html=True)
     p_video_url = "https://www.shutterstock.com/shutterstock/videos/1063989619/preview/stock-footage-fitness-indian-woman-doing-plank-exercise-workout-in-gym-indoors.webm"
     st.video(p_video_url)
     
     #SIT UPS
     st.title("SIT UPS")
-    link_html = '<a href="https://youtu.be/1fbU_MkV7NE?si=bcHWl9xa7PkFSsAu" style="background-color: rgb(0, 128, 131); color: #fff; text-decoration:none; padding: 5px;">Video tutorial &rarr;</a>'
+    link_html = '<a href="https://youtu.be/1fbU_MkV7NE?si=bcHWl9xa7PkFSsAu" class="tutorial-link">Video tutorial &rarr;</a>'
     st.markdown(link_html, unsafe_allow_html=True)
     situps_video_url = "https://cdn.coverr.co/videos/coverr-ab-workout-in-the-park-7546/1080p.mp4"
     st.video(situps_video_url)
@@ -858,21 +938,21 @@ elif app_mode == 'Demos and Tutorials':
     
     #KNEE BEND
     st.title("KNEE BEND")
-    link_html = '<a href="https://youtu.be/W4LuS9rK0gU?si=A5dTYz_OHyQmvHHd" style="background-color: rgb(0, 128, 131); color: #fff; text-decoration:none; padding: 5px;">Video tutorial &rarr;</a>'
+    link_html = '<a href="https://youtu.be/W4LuS9rK0gU?si=A5dTYz_OHyQmvHHd" class="tutorial-link">Video tutorial &rarr;</a>'
     st.markdown(link_html, unsafe_allow_html=True)
     kb_video_url ="https://www.shutterstock.com/shutterstock/videos/1061478490/preview/stock-footage-caucasian-woman-spending-time-at-home-in-living-room-exercising-with-dumbbells-doing-squats-in.webm"
     st.video(kb_video_url)
     
     #CRUNCHES
     st.title("CRUNCHES")
-    link_html = '<a href="https://youtu.be/Xyd_fa5zoEU?si=uK846BgYpam0H4X3" style="background-color: rgb(0, 128, 131); color: #fff; text-decoration:none; padding: 5px;">Video tutorial &rarr;</a>'
+    link_html = '<a href="https://youtu.be/Xyd_fa5zoEU?si=uK846BgYpam0H4X3" class="tutorial-link">Video tutorial &rarr;</a>'
     st.markdown(link_html, unsafe_allow_html=True)
     cru_video_url = "https://www.shutterstock.com/shutterstock/videos/1041475927/preview/stock-footage-long-haired-girl-doing-bicycle-crunches-exercise-working-out-at-empty-studio-in-front-the-windows.webm"
     st.video(cru_video_url)
     
     #HALF PLOUGH POSE
     st.title("HALF PLOUGH POSE")
-    link_html = '<a href="https://youtu.be/uqKbLaXSfWE" style="background-color: rgb(0, 128, 131); color: #fff; text-decoration:none; padding: 5px;">Video tutorial &rarr;</a>'
+    link_html = '<a href="https://youtu.be/uqKbLaXSfWE" class="tutorial-link">Video tutorial &rarr;</a>'
     st.markdown(link_html, unsafe_allow_html=True)
     hp_video_url = "https://www.shutterstock.com/shutterstock/videos/1105807867/preview/stock-footage-video-of-woman-performing-alternate-leg-ardha-halasana-this-exercise-strengthen-the-muscles-of.webm"
     st.video(hp_video_url)
@@ -883,7 +963,7 @@ elif app_mode == 'Training':
     st.markdown("""
     <div class="section-heading">
         <h2 style="margin:0 0 6px 0;">🏋️ Start Your Workout</h2>
-        <p style="color:#B8D8C8; font-size:16px; margin:0;">
+        <p style="color:#766B86; font-size:16px; margin:0;">
             Set up your session and let your AI trainer guide your movement.
         </p>
     </div>
@@ -891,15 +971,15 @@ elif app_mode == 'Training':
 
     st.markdown("""
     <div style="
-        background:linear-gradient(145deg, rgba(26,48,40,.95), rgba(17,35,28,.95));
-        border:1px solid rgba(139,255,176,.18);
+        background:linear-gradient(145deg, rgba(248, 239, 255, .98), rgba(255, 240, 247, .98));
+        border:1px solid rgba(199, 167, 232, .45);
         border-radius:18px;
         padding:22px 24px 10px 24px;
         margin:16px 0 22px 0;">
-        <div style="color:#8BFFB0;font-size:12px;font-weight:800;letter-spacing:1.5px;">
+        <div style="color:#8B6BCB;font-size:12px;font-weight:800;letter-spacing:1.5px;">
             PERSONAL WORKOUT SETUP
         </div>
-        <div style="color:#F4FFF8;font-size:14px;margin-top:5px;">
+        <div style="color:#493653;font-size:14px;margin-top:5px;">
             Add your details, choose an exercise and select your repetition target.
         </div>
     </div>
@@ -945,11 +1025,11 @@ elif app_mode == 'Training':
 
     st.markdown("""
     <div style="
-        background:rgba(57,217,138,.07);
-        border-left:4px solid #39D98A;
+        background:rgba(199, 167, 232, .18);
+        border-left:4px solid #C7A7E8;
         padding:12px 16px;
         border-radius:10px;
-        color:#CDEBDD;
+        color:#514860;
         font-size:14px;
         margin:14px 0 18px 0;">
         💡 Tip: Keep your full body visible in the camera and exercise in a well-lit space.
@@ -1013,8 +1093,8 @@ elif app_mode == 'Training':
 
         st.markdown("""
         <div class="page-hero" style="padding:16px 20px;margin:10px 0 16px 0;">
-          <h2 style="margin:0;color:#8BFFB0 !important;">📹 Live Workout Session</h2>
-          <p style="margin:5px 0 0 0;color:#D7F2E2;">Follow the on-screen guidance and keep your posture visible to the camera.</p>
+          <h2 style="margin:0;color:#8B6BCB !important;">📹 Live Workout Session</h2>
+          <p style="margin:5px 0 0 0;color:#514860;">Follow the on-screen guidance and keep your posture visible to the camera.</p>
         </div>
         """, unsafe_allow_html=True)
         ltitle, ctitle, rtitle = st.columns(3, gap="medium")
@@ -1023,19 +1103,19 @@ elif app_mode == 'Training':
             with st.container(border=True):
                 st.markdown("**FRAME RATE**")
                 kpi1_text = st.empty()
-                kpi1_text.markdown("<h2 style='text-align:center;color:#8BFFB0;'>0</h2>", unsafe_allow_html=True)
+                kpi1_text.markdown("<h2 style='text-align:center;color:#8B6BCB;'>0</h2>", unsafe_allow_html=True)
 
         with ctitle:
             with st.container(border=True):
                 st.markdown("**REPETITIONS**")
                 kpi2_text = st.empty()
-                kpi2_text.markdown("<h2 style='text-align:center;color:#8BFFB0;'>0</h2>", unsafe_allow_html=True)
+                kpi2_text.markdown("<h2 style='text-align:center;color:#8B6BCB;'>0</h2>", unsafe_allow_html=True)
 
         with rtitle:
             with st.container(border=True):
                 st.markdown("**TARGET**")
                 kpi3_text = st.empty()
-                kpi3_text.markdown("<h2 style='text-align:center;color:#8BFFB0;'>0</h2>", unsafe_allow_html=True)
+                kpi3_text.markdown("<h2 style='text-align:center;color:#8B6BCB;'>0</h2>", unsafe_allow_html=True)
 
         st.markdown("**💡 Trainer Suggestions**")
         sugg = st.empty()
@@ -1539,10 +1619,10 @@ elif app_mode == 'Training':
                 fps = 1 / max(currTime - prevTime, 1e-6)
                 prevTime = currTime
 
-                kpi1_text.markdown(f"<h2 style='text-align:center;color:#8BFFB0;'>{int(fps)}</h2>", unsafe_allow_html=True)
-                kpi2_text.markdown(f"<h2 style='text-align:center;color:#8BFFB0;'>{counter}</h2>", unsafe_allow_html=True)
-                kpi3_text.markdown(f"<h2 style='text-align:center;color:#8BFFB0;'>{press_time}</h2>", unsafe_allow_html=True)
-                sugg.markdown(f"<div class='info-card' style='min-height:unset;color:#8BFFB0;font-size:18px;font-weight:700;'>{suggestion}</div>", unsafe_allow_html=True)
+                kpi1_text.markdown(f"<h2 style='text-align:center;color:#8B6BCB;'>{int(fps)}</h2>", unsafe_allow_html=True)
+                kpi2_text.markdown(f"<h2 style='text-align:center;color:#8B6BCB;'>{counter}</h2>", unsafe_allow_html=True)
+                kpi3_text.markdown(f"<h2 style='text-align:center;color:#8B6BCB;'>{press_time}</h2>", unsafe_allow_html=True)
+                sugg.markdown(f"<div class='info-card' style='min-height:unset;color:#8B6BCB;font-size:18px;font-weight:700;'>{suggestion}</div>", unsafe_allow_html=True)
                 # Keep RGB channel order consistent for correct preview colours.
                 # Display at native processing size; do not enlarge and waste memory.
                 stframe.image(frame, channels='RGB', use_container_width=False, width=320)
@@ -1555,8 +1635,8 @@ elif app_mode == 'Training':
 elif app_mode == 'History':
     st.markdown("""
     <div class="page-hero">
-      <h1 style="margin:0;color:#8BFFB0 !important;">📊 Workout History</h1>
-      <p style="margin:8px 0 0 0;color:#E5F4EB;">Review your completed sessions and track your fitness activity.</p>
+      <h1 style="margin:0;color:#8B6BCB !important;">📊 Workout History</h1>
+      <p style="margin:8px 0 0 0;color:#514860;">Review your completed sessions and track your fitness activity.</p>
     </div>
     """, unsafe_allow_html=True)
     history_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), "workout_history.csv")
@@ -1616,12 +1696,12 @@ elif app_mode == 'History':
                     ])
                 pdf_table = Table(pdf_rows, repeatRows=1, colWidths=[80, 95, 260])
                 pdf_table.setStyle(TableStyle([
-                    ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#174D38")),
-                    ("TEXTCOLOR", (0, 0), (-1, 0), colors.white),
+                    ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#F2E8FA")),
+                    ("TEXTCOLOR", (0, 0), (-1, 0), colors.HexColor("#514860")),
                     ("GRID", (0, 0), (-1, -1), 0.4, colors.grey),
                     ("FONTSIZE", (0, 0), (-1, -1), 7),
                     ("VALIGN", (0, 0), (-1, -1), "TOP"),
-                    ("ROWBACKGROUNDS", (0, 1), (-1, -1), [colors.white, colors.HexColor("#EAF5EE")])
+                    ("ROWBACKGROUNDS", (0, 1), (-1, -1), [colors.white, colors.HexColor("#F4EFFA")])
                 ]))
                 story.append(pdf_table)
                 pdf_doc.build(story)
