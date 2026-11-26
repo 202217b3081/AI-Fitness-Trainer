@@ -317,6 +317,25 @@ st.markdown(
         min-height: 44px;
     }
 
+    /* Keep text readable in Streamlit's disabled, pre-filled profile fields. */
+    .stTextInput input:disabled,
+    .stTextInput input[disabled],
+    [data-testid="stTextInput"] input:disabled {
+        background: #ffffff !important;
+        color: #342d45 !important;
+        -webkit-text-fill-color: #342d45 !important;
+        opacity: 1 !important;
+        border: 1.5px solid #d9c6ed !important;
+        box-shadow: none !important;
+        cursor: default !important;
+    }
+    .stTextInput input::placeholder,
+    [data-testid="stTextInput"] input::placeholder {
+        color: #756b83 !important;
+        -webkit-text-fill-color: #756b83 !important;
+        opacity: 1 !important;
+    }
+
     /* Keep Streamlit's selected dropdown and its opened menu in the same soft theme. */
     [data-testid="stSidebar"] [data-baseweb="select"] > div,
     [data-testid="stSidebar"] [data-baseweb="select"] div[role="combobox"],
