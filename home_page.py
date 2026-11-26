@@ -956,7 +956,7 @@ elif app_mode == 'Training':
         st.markdown("<hr/>", unsafe_allow_html=True)
 
         with mp_pose.Pose(static_image_mode=False,
-                          model_complexity=0,
+                          model_complexity=1,
                           smooth_landmarks=False,
                           enable_segmentation=False,
                           min_detection_confidence=0.5,
