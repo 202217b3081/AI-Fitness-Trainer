@@ -1055,7 +1055,17 @@ elif app_mode == 'Training':
     </div>
     """, unsafe_allow_html=True)
 
-    run = st.checkbox("Start Workout")
+    # Reset the Start Workout control on the rerun after a completed target.
+    # Hiding the WebRTC component on that rerun releases the browser camera.
+    if st.session_state.pop("reset_workout_after_completion", False):
+        st.session_state["start_workout"] = False
+        st.session_state["show_workout_completed"] = True
+
+    run = st.checkbox("Start Workout", key="start_workout")
+    if st.session_state.pop("show_workout_completed", False):
+        st.success("Target completed! Your workout has stopped and the camera has been released.")
+
+    completion_triggered = False
 
     if option == "Left Curl":
         count = 0
@@ -1075,6 +1085,11 @@ elif app_mode == 'Training':
 
     if option == "Crunches":
         f=0
+
+    # Squat counter uses a separate two-state cycle with relaxed angle thresholds.
+    # One repetition is counted only after bending and returning to standing.
+    if option == "Squats":
+        squat_stage = "standing"
 
     while run:
         stframe = st.empty()
@@ -1334,24 +1349,30 @@ elif app_mode == 'Training':
                         drawOn(frame, 24, 26, 28, angle_right_knee, landmarks)
                         drawOn(frame, 23, 25, 27, angle_left_knee, landmarks)
                         color = (255, 0, 255)
-                        if angle_right_knee >= 173 and angle_left_knee >= 173:
-                            stage = "down"
-                            suggestion = "Go Down"
-                        elif angle_right_knee <= 90 and angle_left_knee <= 90 and stage == 'down':
-                            stage = "up"
+
+                        # Use the average of both knee angles to reduce missed reps
+                        # when one leg is slightly obscured or angled to the camera.
+                        average_knee_angle = (angle_right_knee + angle_left_knee) / 2.0
+                        if average_knee_angle <= 110 and squat_stage == "standing":
+                            squat_stage = "lowered"
+                            suggestion = "Good! Now stand up"
+                        elif average_knee_angle >= 155 and squat_stage == "lowered":
+                            squat_stage = "standing"
                             counter += 1
-                            suggestion = "Go Up"
+                            suggestion = "Squat repetition completed!"
+                        elif average_knee_angle > 110 and average_knee_angle < 155:
+                            suggestion = "Move a little lower, then stand up"
+                        elif squat_stage == "standing":
+                            suggestion = "Stand straight, then squat down"
+
                         cv2.putText(frame, f"stage: {str(suggestion)}", (10, 100), cv2.FONT_HERSHEY_SIMPLEX, 1,
                                     (0, 0, 255), 2, cv2.LINE_AA)
 
-                        # visualizing angle_left_knee
-                        per1 = np.interp(angle_left_knee, (90, 173), (100, 0))
-                        bar1 = np.interp(angle_left_knee, (90, 173), (60, 420))
-
-
-                        # visualizing angle_right_knee
-                        per2 = np.interp(angle_right_knee, (90, 173), (100, 0))
-                        bar2 = np.interp(angle_right_knee, (90, 173), (60, 420))
+                        # Visualise both knee angles using the same relaxed range.
+                        per1 = np.interp(angle_left_knee, (110, 155), (100, 0))
+                        bar1 = np.interp(angle_left_knee, (110, 155), (60, 420))
+                        per2 = np.interp(angle_right_knee, (110, 155), (100, 0))
+                        bar2 = np.interp(angle_right_knee, (110, 155), (60, 420))
 
                         if per1 == 100 and per2==100:
                             color=(0,255,0)
@@ -1565,7 +1586,10 @@ elif app_mode == 'Training':
                                         (0, 0, 255), 2, cv2.LINE_AA)
 
 
-                    if counter == int(press_time):
+                    # Use >= so a counter that moves past the target cannot miss completion.
+                    # Ignore 0 because it is the select slider's initial placeholder value.
+                    if int(press_time) > 0 and counter >= int(press_time):
+                        completion_triggered = True
                         completed_exercise = option
                         completed_message = message
 
@@ -1646,9 +1670,13 @@ elif app_mode == 'Training':
                 # Display at native processing size; do not enlarge and waste memory.
                 stframe.image(frame, channels='RGB', use_container_width=False, width=320)
 
-        # Always release the webcam after the processing loop exits.
+        # Always release the frame adapter after the processing loop exits.
         cap.release()
         run = False
+
+    if completion_triggered:
+        st.session_state["reset_workout_after_completion"] = True
+        st.rerun()
 
 
 elif app_mode == 'History':
