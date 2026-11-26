@@ -8,6 +8,8 @@ import pandas as pd
 import os
 import re
 import io
+from queue import Queue, Empty, Full
+from streamlit_webrtc import webrtc_streamer, WebRtcMode, VideoProcessorBase
 from EmailingSystem import email_user
 from graph import single_plot,double_plot
 from calc import cals
@@ -136,6 +138,58 @@ def history_totals(data):
     return len(data), reps, calories
 
 init_feature_db()
+
+
+class BrowserCameraProcessor(VideoProcessorBase):
+    """Receives camera frames from the visitor's browser (not the cloud server)."""
+    def __init__(self):
+        self.frame_queue = Queue(maxsize=1)
+
+    def recv(self, frame):
+        image = frame.to_ndarray(format="bgr24")
+        # Keep only the newest frame so a slow 4 GB laptop does not build a backlog.
+        try:
+            self.frame_queue.put_nowait(image)
+        except Full:
+            try:
+                self.frame_queue.get_nowait()
+            except Empty:
+                pass
+            try:
+                self.frame_queue.put_nowait(image)
+            except Full:
+                pass
+        return frame
+
+
+class BrowserCameraCapture:
+    """Small OpenCV-like adapter around frames received through WebRTC."""
+    def __init__(self, frame_queue, context):
+        self.frame_queue = frame_queue
+        self.context = context
+
+    def isOpened(self):
+        return bool(self.context.state.playing)
+
+    def read(self):
+        try:
+            return True, self.frame_queue.get(timeout=1.0)
+        except Empty:
+            return False, None
+
+    def get(self, prop):
+        if prop == cv2.CAP_PROP_FRAME_WIDTH:
+            return 640
+        if prop == cv2.CAP_PROP_FRAME_HEIGHT:
+            return 480
+        if prop == cv2.CAP_PROP_FPS:
+            return 10
+        return 0
+
+    def release(self):
+        # The browser owns the camera; the visitor stops it with WebRTC's STOP button.
+        return None
+
 
 flag=1
 mp_pose = mp.solutions.pose
@@ -609,7 +663,7 @@ if app_mode == 'About App':
     st.markdown("""
     <div class="info-card">
       <h3 style="margin:0 0 8px 0;">🤖 About the Application</h3>
-      <p style="margin:0;color:#D7EDE1;">MediaPipe is used to detect body pose landmarks, OpenCV reads and processes webcam frames, and Streamlit provides the web-based graphical user interface.</p>
+      <p style="margin:0;color:#D7EDE1;">MediaPipe detects body pose landmarks, OpenCV processes frames received securely from the browser camera through WebRTC, and Streamlit provides the web-based graphical user interface.</p>
     </div>
     <h2 style="margin-top:22px;">📋 How to Use</h2>
     """, unsafe_allow_html=True)
@@ -835,34 +889,32 @@ elif app_mode == 'Training':
     if option == "Crunches":
         f=0
 
-    path=0
-    # path="test/left_curl_demo.mp4"
-    # path = "test/letral.mp4"
-    # path = "test/curls_demo.mp4"
-    # path = "test/squats1.mp4"
-    # path = "test/shoulderpress_demo.mp4"
-    # path = "test/highkness.mp4"
-    # path = "test/pushup2_demo.mp4"
-    # path = "test/KneeBendVideo.mp4"
-    # path = "test/situps.mp4"
-    # path = "test/crunches 1.mp4"
-    # path = "test/plough.mp4"
-    # time.sleep(2)
     while run:
         stframe = st.empty()
-        # Request a clearer webcam stream. Actual quality depends on the camera hardware.
-        cap = cv2.VideoCapture(path, cv2.CAP_DSHOW) if isinstance(path, int) else cv2.VideoCapture(path)
-        if isinstance(path, int):
-            # LOW-RESOURCE CAMERA SETTINGS for laptops with 4 GB RAM.
-            # Do not request 720p: it can overload older CPUs/webcams.
-            cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
-            cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
-            cap.set(cv2.CAP_PROP_FPS, 10)
-            cap.set(cv2.CAP_PROP_BUFFERSIZE, 1)
-
-        if not cap.isOpened():
-            st.error("Camera could not be opened. Check camera permission and close other apps using the camera.")
+        st.markdown("### Browser camera")
+        st.caption("Allow camera access in your browser. For a 4 GB RAM laptop, the app processes a small 320 × 240 frame at a low frame rate.")
+        camera_ctx = webrtc_streamer(
+            key="ai-fitness-trainer-camera",
+            mode=WebRtcMode.SENDRECV,
+            video_processor_factory=BrowserCameraProcessor,
+            media_stream_constraints={
+                "video": {
+                    "width": {"ideal": 640},
+                    "height": {"ideal": 480},
+                    "frameRate": {"ideal": 10, "max": 10},
+                },
+                "audio": False,
+            },
+            rtc_configuration={
+                "iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]
+            },
+            async_processing=True,
+        )
+        if not camera_ctx.state.playing or camera_ctx.video_processor is None:
+            st.info("Click START in the camera panel above and allow camera permission. The workout will begin when the browser camera is connected.")
             st.stop()
+
+        cap = BrowserCameraCapture(camera_ctx.video_processor.frame_queue, camera_ctx)
 
         width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
         height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
@@ -918,7 +970,7 @@ elif app_mode == 'Training':
                     failed_reads += 1
                     # Avoid a tight infinite loop if the webcam disconnects/freezes.
                     if failed_reads >= 10:
-                        st.error("Camera stopped responding. Close the workout and check the webcam.")
+                        st.error("Browser camera stopped sending frames. Check camera permission or press STOP and START again.")
                         break
                     time.sleep(0.05)
                     continue
@@ -1396,7 +1448,7 @@ elif app_mode == 'Training':
 
                 mp_drawing.draw_landmarks(frame, result.pose_landmarks, mp_pose.POSE_CONNECTIONS)
                 currTime = time.time()
-                fps = 1 / (currTime - prevTime)
+                fps = 1 / max(currTime - prevTime, 1e-6)
                 prevTime = currTime
 
                 kpi1_text.markdown(f"<h2 style='text-align:center;color:#8BFFB0;'>{int(fps)}</h2>", unsafe_allow_html=True)
